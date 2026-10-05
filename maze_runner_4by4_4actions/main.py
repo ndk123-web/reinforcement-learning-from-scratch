@@ -51,7 +51,7 @@ def step(state, action):
 
 def train():
     global epsilon
-    
+
     for episode in range(episodes):
         state = start
         done = False
@@ -84,18 +84,18 @@ def train():
         epsilon = max(0.01, epsilon * 0.995)
 
 
-train()
+if __name__ == "__main__":
+    train()
+    arrows = ["↑", "↓", "←", "→"]
 
-arrows = ["↑", "↓", "←", "→"]
-
-for s in range(rows * cols):
-    if s == goal:
-        print("G", end=" ")
-    elif s in obstacles:
-        print("#", end=" ")
-    else:
-        print(arrows[np.argmax(Q[s])], end=" ")
-    if s % cols == cols - 1:
-        print()
+    for s in range(rows * cols):
+        if s == goal:
+            print("G", end=" ")
+        elif s in obstacles:
+            print("#", end=" ")
+        else:
+            print(arrows[np.argmax(Q[s])], end=" ")
+        if s % cols == cols - 1:
+            print()
 
 print("Q table: \n", np.round(Q, 2))
