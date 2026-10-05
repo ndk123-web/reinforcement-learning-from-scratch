@@ -1,38 +1,38 @@
-# Quick Concept & Terminology Reference
+# Quick RL Concept & Hyperparameter Cheat Sheet
 
-A concise summary of all Reinforcement Learning (RL) concepts, parameters, and terms used in this project:
-
----
-
-## 🧠 Core RL Concepts & Terms
-
-- **Agent**: The learner/decision-maker navigating the grid.
-- **Environment**: The $4 \times 4$ GridWorld maze with boundary walls and obstacles.
-- **State ($s \in S$)**: The agent's current position (16 states: indices `0` to `15`).
-- **Action ($a \in A$)**: The movement choices (`0: Up`, `1: Down`, `2: Left`, `3: Right`).
-- **Reward ($r$)**: Feedback signal (+10 for goal, -5 for obstacles, -1 for normal/boundary steps).
-- **Q-Table ($Q(s, a)$)**: A lookup table ($16 \times 4$) storing expected cumulative rewards for state-action pairs.
-- **Policy ($\pi(s)$)**: The strategy mapping each state to the best action (`argmax Q[s]`).
-- **Q-Learning**: A model-free, off-policy Temporal Difference (TD) algorithm to learn the optimal policy.
-- **Bellman Equation**: Update rule: $Q(s, a) \leftarrow Q(s, a) + \alpha [r + \gamma \max_{a'} Q(s', a') - Q(s, a)]$.
-- **Episode**: A complete run from the start state (`0`) until reaching the terminal goal state (`15`).
+A concise reference of all Reinforcement Learning (RL) terminology and parameters across this repository.
 
 ---
 
-## ⚙️ Key Hyperparameters Explained
+## 📌 Core RL Concepts
 
-### 1. **Gamma ($\gamma$) — Discount Factor (`0.95`)**
-- **Purpose**: Balances **immediate rewards vs. future rewards**.
-- **$\gamma \to 0$ (Short-sighted):** Only values the next immediate reward.
-- **$\gamma \to 1$ (Far-sighted):** Values long-term cumulative rewards (reaching the goal).
+- **Agent**: The learner that takes actions in the maze environment.
+- **Environment**: GridWorld matrices ($4 \times 4$ and $5 \times 5$) with obstacles and boundaries.
+- **State ($s \in S$)**: The agent's current position cell index (`0` to `ROWS * COLS - 1`).
+- **Action ($a \in A$)**: Directional movement choices (Orthogonal: `4 actions`, or Diagonal-inclusive: `6 actions`).
+- **Reward ($r$)**: Scalar environmental feedback (+10 for goal, -5 for obstacles, -1 for regular/wall steps).
+- **Q-Table ($Q(s, a)$)**: Lookup matrix storing expected cumulative returns for each state-action pair.
+- **Policy ($\pi(s)$)**: Decision rule picking the best action from learned values ($\arg\max_a Q(s, a)$).
+- **Bellman Equation**: TD update formula:
+  $$Q(s, a) \leftarrow Q(s, a) + \alpha [r + \gamma \max_{a'} Q(s', a') - Q(s, a)]$$
+- **Episode / Epoch**: One full trajectory starting from `START` state until reaching `GOAL` or terminating.
 
-### 2. **Alpha ($\alpha$) — Learning Rate (`0.1`)**
-- **Purpose**: Controls **how fast new experience overwrites old knowledge**.
-- **$\alpha = 0$:** Learns nothing (Q-values never change).
-- **$\alpha = 1$:** Discards previous history, only remembering the latest transition.
-- **$\alpha = 0.1$:** Ensures steady, stable convergence.
+---
 
-### 3. **Epsilon ($\epsilon$) — Exploration Rate (`1.0` $\to$ `0.01`)**
-- **Purpose**: Balances **Exploration** (discovering unknown paths) vs. **Exploitation** (taking the best known action).
-- **$\epsilon = 1.0$ (Training Start):** 100% random actions to explore the maze.
-- **$\epsilon \to 0.01$ (Training End via Decay $\times 0.995$):** 99% greedy choices following the learned optimal policy.
+## ⚙️ Hyperparameters Explained
+
+### 1. **Gamma ($\gamma$) — Discount Factor**
+- **Definition**: Determines how much the agent values future rewards compared to immediate rewards.
+- **$\gamma \to 0$ (Short-sighted):** Cares only about the next step reward.
+- **$\gamma \to 1$ (Far-sighted):** Highly values reaching the long-term goal.
+
+### 2. **Alpha ($\alpha$) — Learning Rate**
+- **Definition**: Controls the rate at which newly acquired information overwrites old Q-values.
+- **$\alpha = 0$:** No learning occurs.
+- **$\alpha = 1$:** Discards previous history, relying entirely on the newest step transition.
+- **Low $\alpha$ (e.g., $0.01$ - $0.1$):** Ensures stable, gradual convergence.
+
+### 3. **Epsilon ($\epsilon$) — Exploration Rate**
+- **Definition**: Governs the $\epsilon$-greedy balance between **Exploration** (discovering unknown paths) and **Exploitation** (choosing the highest Q-value).
+- **$\epsilon = 1.0$ (Start):** 100% random actions to explore the maze topology.
+- **$\epsilon \to 0.01$ (Decay):** Gradually shifts to exploiting the learned optimal policy.
