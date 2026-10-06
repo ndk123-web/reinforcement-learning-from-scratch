@@ -97,5 +97,7 @@ if __name__ == "__main__":
             print(arrows[np.argmax(Q[s])], end=" ")
         if s % cols == cols - 1:
             print()
+        
+    np.save("q_table", Q) 
 
 print("Q table: \n", np.round(Q, 2))
